@@ -15,11 +15,9 @@ def answer_question(user_question, model, tokenizer, preprocessed_qa_pairs):
     user_question_vector = vectorizer.transform([user_question])
     similarity_scores = cosine_similarity(user_question_vector, vectors)
 
-    # Find the most similar question in the knowledge base
     most_similar_index = similarity_scores.argmax()
     most_similar_qa_pair = preprocessed_qa_pairs[most_similar_index]
 
-    # If similarity is below a threshold, use the fine-tuned BERT model
     threshold = 0.2
     if similarity_scores[0, most_similar_index] < threshold:
         input_ids = tokenizer.encode(user_question, most_similar_qa_pair["context"], add_special_tokens=True)
@@ -35,7 +33,6 @@ def answer_question(user_question, model, tokenizer, preprocessed_qa_pairs):
 
         answer = tokenizer.decode(input_ids[start_index:end_index+1], skip_special_tokens=True)
         
-        # If the answer is empty, return a custom error message
         if not answer.strip():
             return "Sorry, I couldn't find an answer to your question."
 
@@ -97,15 +94,7 @@ class Interface:
                            command=lambda: self.take_input())
         button.pack(padx=10, pady=10)
 
-    # def take_input(self):
-    #     input_text = self.input.get()
-    #     if input_text:
-    #         self.text_field.config(text=self.text_field.cget("text") + "Question:  " + input_text + "\n")
 
-    #         # answer = self.test.predict(input_text)
-    #         self.text_field.config(text=self.text_field.cget("text") + "Answer:     " + answer + "\n\n")
-
-    #         self.input.delete(0, tk.END)
 
     def take_input(self):
         model_name = "bert-base-uncased"
@@ -115,10 +104,8 @@ class Interface:
         if input_text:
             self.text_field.config(text=self.text_field.cget("text") + "Question:  " + input_text + "\n")
 
-            # Call the answer_question function with the fine_tuned_model, tokenizer, and preprocessed_qa_pairs
             answer = answer_question(input_text, self.test, tokenizer, self.preprocessed_qa_pairs)
 
-            # Now, update the text field with the answer
             self.text_field.config(text=self.text_field.cget("text") + "Answer:     " + answer + "\n\n")
 
             self.input.delete(0, tk.END)
@@ -127,25 +114,7 @@ class Interface:
     def rgb_hack(self, rgb):
         return "#%02x%02x%02x" % rgb
 
-# def main():
-#     # Load pre-trained BERT tokenizer
-#     model_name = "bert-base-uncased"
-#     tokenizer = BertTokenizer.from_pretrained(model_name)
-
-#     # Load the fine-tuned BERT model
-#     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-#     fine_tuned_model = BertForQuestionAnswering.from_pretrained("bert-base-uncased").to(device)
-#     fine_tuned_model.load_state_dict(torch.load("fine_tuned_bert_model.pth"))
-
-#     chatbot_interface = Interface(fine_tuned_model, preprocessed_qa_pairs)
-#     chatbot_interface.start()
-
 def main():
-    # Load pre-trained BERT tokenizer
-    # model_name = "bert-base-uncased"
-    # tokenizer = BertTokenizer.from_pretrained(model_name)
-
-    # Load the fine-tuned BERT model
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     fine_tuned_model = BertForQuestionAnswering.from_pretrained("bert-base-uncased").to(device)
     fine_tuned_model.load_state_dict(torch.load("fine_tuned_bert_model.pth"))
