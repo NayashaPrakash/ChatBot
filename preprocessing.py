@@ -65,7 +65,7 @@ tokenizer = BertTokenizer.from_pretrained(model_name)
 # Provide the path to the downloaded SQuAD JSON file
 squad_file_path = "data/squad_dataset.json"
 squad_data = read_squad_dataset(squad_file_path)
-qa_pairs = extract_qa_pairs(squad_data)[:1000]
+qa_pairs = extract_qa_pairs(squad_data)
 preprocessed_qa_pairs = preprocess_qa_pairs(qa_pairs, tokenizer)
 
 # Print a sample of preprocessed QA pairs
