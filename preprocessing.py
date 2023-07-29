@@ -6,7 +6,7 @@ from nltk.tokenize import word_tokenize
 from tqdm import tqdm
 from transformers import BertTokenizer, BertModel
 
-# Download NLTK resources (if not already downloaded)
+
 nltk.download("punkt")
 nltk.download("stopwords")
 
@@ -58,17 +58,17 @@ def preprocess_qa_pairs(qa_pairs, tokenizer):
         })
     return preprocessed_qa_pairs
 
-# Load pre-trained BERT tokenizer
+
 model_name = "bert-base-uncased"
 tokenizer = BertTokenizer.from_pretrained(model_name)
 
-# Provide the path to the downloaded SQuAD JSON file
+
 squad_file_path = "data/squad_dataset.json"
 squad_data = read_squad_dataset(squad_file_path)
 qa_pairs = extract_qa_pairs(squad_data)
 preprocessed_qa_pairs = preprocess_qa_pairs(qa_pairs, tokenizer)
 
-# Print a sample of preprocessed QA pairs
+
 print("Sample Preprocessed QA Pairs:")
 for i in range(min(5, len(preprocessed_qa_pairs))):
     print(f"Question: {preprocessed_qa_pairs[i]['question']}")
